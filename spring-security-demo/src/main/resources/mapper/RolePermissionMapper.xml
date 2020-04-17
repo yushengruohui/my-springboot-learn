@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ys.security.dao.RolePermissionMapper">
+
+    <resultMap type="com.ys.security.domain.entity.RolePermission" id="rolePermissionMap">
+            <id property="rolePermissionId" column="role_permission_id"/>
+            <result property="roleId" column="role_id"/>
+            <result property="permissionId" column="permission_id"/>
+    </resultMap>
+
+    <sql id="studentAllColumn">
+            role_permission_id, role_id, permission_id
+    </sql>
+
+    <!--获取RolePermission表的所有记录-->
+    <select id="listAllRolePermission" resultMap="rolePermissionMap">
+        SELECT
+          <include refid="studentAllColumn" />
+        FROM `role_permission`
+    </select>
+
+    <!--通过主键获取RolePermission表的一条记录-->
+    <select id="getRolePermissionById" resultMap="rolePermissionMap">
+        SELECT
+          <include refid="studentAllColumn" />
+        FROM `role_permission`
+        WHERE role_permission_id = #{rolePermissionId}
+    </select>
+
+    <!--查询RolePermission表中是否存在符合查询条件的记录-->
+    <select id="existRolePermission" resultType="java.lang.Integer">
+        SELECT 1
+        FROM `role_permission`
+        <where>
+            <if test="rolePermissionId != null">
+                AND role_permission_id = #{rolePermissionId}
+            </if>
+            <if test="roleId != null">
+                AND role_id = #{roleId}
+            </if>
+            <if test="permissionId != null">
+                AND permission_id = #{permissionId}
+            </if>
+        </where>
+        LIMIT 1
+    </select>
+
+    <!--获取一条符合查询条件的RolePermission表记录-->
+    <select id="getRolePermission" resultMap="rolePermissionMap">
+        SELECT
+          <include refid="studentAllColumn" />
+        FROM `role_permission`
+        <where>
+            <if test="rolePermissionId != null">
+                AND role_permission_id = #{rolePermissionId}
+            </if>
+            <if test="roleId != null">
+                AND role_id = #{roleId}
+            </if>
+            <if test="permissionId != null">
+                AND permission_id = #{permissionId}
+            </if>
+        </where>
+        LIMIT 1
+    </select>
+
+    <!--获取RolePermission表中符合查询条件的所有记录-->
+    <select id="listRolePermission" resultMap="rolePermissionMap">
+        SELECT
+          <include refid="studentAllColumn" />
+        FROM `role_permission`
+        <where>
+            <if test="rolePermissionId != null">
+                AND role_permission_id = #{rolePermissionId}
+            </if>
+            <if test="roleId != null">
+                AND role_id = #{roleId}
+            </if>
+            <if test="permissionId != null">
+                AND permission_id = #{permissionId}
+            </if>
+        </where>
+    </select>
+
+    <!--在RolePermission表中添加一条记录-->
+    <insert id="insertRolePermission" keyProperty="rolePermissionId" useGeneratedKeys="true">
+        INSERT INTO `role_permission`(
+            <trim suffixOverrides=",">
+            <if test="roleId != null">role_id, </if>
+            <if test="permissionId != null">permission_id, </if>
+            </trim>
+                )
+        VALUES (
+            <trim suffixOverrides=",">
+            <if test="roleId != null">#{roleId}, </if>
+            <if test="permissionId != null">#{permissionId}, </if>
+            </trim>
+                )
+    </insert>
+
+    <!--在RolePermission表中更新一条记录-->
+    <update id="updateRolePermission">
+        UPDATE `role_permission`
+        <set>
+            <if test="roleId != null">
+                role_id = #{roleId},
+            </if>
+            <if test="permissionId != null">
+                permission_id = #{permissionId},
+            </if>
+        </set>
+        WHERE role_permission_id = #{rolePermissionId}
+    </update>
+
+    <!--通过主键删除RolePermission表中的一条记录-->
+    <delete id="deleteRolePermissionById">
+        DELETE FROM `role_permission` WHERE role_permission_id = #{rolePermissionId}
+    </delete>
+
+    <!--统计RolePermission表中符合查询条件的记录条数-->
+    <select id="countRolePermission" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM `role_permission`
+        <where>
+            <if test="rolePermissionId != null">
+                AND role_permission_id = #{rolePermissionId}
+            </if>
+            <if test="roleId != null">
+                AND role_id = #{roleId}
+            </if>
+            <if test="permissionId != null">
+                AND permission_id = #{permissionId}
+            </if>
+        </where>
+    </select>
+
+</mapper>

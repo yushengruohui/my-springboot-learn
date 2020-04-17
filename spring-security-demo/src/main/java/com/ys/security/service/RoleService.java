@@ -1,0 +1,96 @@
+package com.ys.security.service;
+
+import com.ys.security.domain.entity.Permission;
+import com.ys.security.domain.entity.Role;
+
+import java.util.List;
+
+/**
+ * Role表业务层接口
+ *
+ * @author yusheng
+ * @create-time 2020-04-17 15:27:39
+ */
+public interface RoleService {
+
+    /**
+     * 获取 Role 表所有记录
+     *
+     * @return rolePOList
+     */
+    List<Role> listAllRole();
+
+    /**
+     * 通过主键获取一条 Role 表记录
+     *
+     * @param roleId Role表主键
+     * @return rolePO
+     */
+    Role getRoleById(Long roleId);
+
+    /**
+     * 获取一条符合要求的 Role 表记录
+     *
+     * @param roleQO 查询条件对象
+     * @return rolePO
+     */
+    Role getRole(Role roleQO);
+
+    /**
+     * 获取 Role 表中符合查询条件的所有记录
+     *
+     * @param roleQO 查询条件对象
+     * @return RolePOList
+     */
+    List<Role> listRole(Role roleQO);
+
+    /**
+     * 在 Role 表中添加一条记录
+     *
+     * @param roleQO 查询条件对象
+     * @return true|false
+     */
+    Boolean insertRole(Role roleQO);
+
+    /**
+     * 在 Role 表中修改一条记录
+     *
+     * @param roleQO 主键不为空的查询条件对象
+     * @return true|false
+     */
+    Boolean updateRole(Role roleQO);
+
+    /**
+     * 通过主键删除 Role 表中的一条记录
+     *
+     * @param roleId Role表主键
+     * @return true|false
+     */
+    Boolean deleteRoleById(Long roleId);
+
+    /**
+     * 查询 Role 表中是否存在符合查询条件的记录
+     *
+     * @param roleQO 查询条件对象
+     * @return true|false
+     */
+    Boolean existRole(Role roleQO);
+
+    /**
+     * 统计 Role 表中符合查询条件的记录条数
+     *
+     * @param roleQO 查询条件对象
+     * @return 统计值
+     */
+    Integer countRole(Role roleQO);
+
+    /**
+     * 保存一条 Role 表记录
+     *
+     * @param roleQO 查询条件对象
+     * @return true|false
+     */
+    Boolean saveRole(Role roleQO);
+
+    List<Permission> listPermissionByRoleId(Long roleId);
+}

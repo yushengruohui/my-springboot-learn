@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ys.security.dao.RoleMapper">
+
+    <resultMap type="com.ys.security.domain.entity.Role" id="roleMap">
+            <id property="roleId" column="role_id"/>
+            <result property="roleName" column="role_name"/>
+    </resultMap>
+
+    <sql id="studentAllColumn">
+            role_id, role_name
+    </sql>
+
+    <!--获取Role表的所有记录-->
+    <select id="listAllRole" resultMap="roleMap">
+        SELECT
+          <include refid="studentAllColumn" />
+        FROM `role`
+    </select>
+
+    <!--通过主键获取Role表的一条记录-->
+    <select id="getRoleById" resultMap="roleMap">
+        SELECT
+          <include refid="studentAllColumn" />
+        FROM `role`
+        WHERE role_id = #{roleId}
+    </select>
+
+    <!--查询Role表中是否存在符合查询条件的记录-->
+    <select id="existRole" resultType="java.lang.Integer">
+        SELECT 1
+        FROM `role`
+        <where>
+            <if test="roleId != null">
+                AND role_id = #{roleId}
+            </if>
+            <if test="roleName != null and roleName != ''">
+                AND role_name = #{roleName}
+            </if>
+        </where>
+        LIMIT 1
+    </select>
+
+    <!--获取一条符合查询条件的Role表记录-->
+    <select id="getRole" resultMap="roleMap">
+        SELECT
+          <include refid="studentAllColumn" />
+        FROM `role`
+        <where>
+            <if test="roleId != null">
+                AND role_id = #{roleId}
+            </if>
+            <if test="roleName != null and roleName != ''">
+                AND role_name = #{roleName}
+            </if>
+        </where>
+        LIMIT 1
+    </select>
+
+    <!--获取Role表中符合查询条件的所有记录-->
+    <select id="listRole" resultMap="roleMap">
+        SELECT
+          <include refid="studentAllColumn" />
+        FROM `role`
+        <where>
+            <if test="roleId != null">
+                AND role_id = #{roleId}
+            </if>
+            <if test="roleName != null and roleName != ''">
+                AND role_name = #{roleName}
+            </if>
+        </where>
+    </select>
+
+    <!--在Role表中添加一条记录-->
+    <insert id="insertRole" keyProperty="roleId" useGeneratedKeys="true">
+        INSERT INTO `role`(
+            <trim suffixOverrides=",">
+            <if test="roleName != null and roleName != ''">role_name, </if>
+            </trim>
+                )
+        VALUES (
+            <trim suffixOverrides=",">
+            <if test="roleName != null and roleName != ''">#{roleName}, </if>
+            </trim>
+                )
+    </insert>
+
+    <!--在Role表中更新一条记录-->
+    <update id="updateRole">
+        UPDATE `role`
+        <set>
+            <if test="roleName != null and roleName != ''">
+                role_name = #{roleName},
+            </if>
+        </set>
+        WHERE role_id = #{roleId}
+    </update>
+
+    <!--通过主键删除Role表中的一条记录-->
+    <delete id="deleteRoleById">
+        DELETE FROM `role` WHERE role_id = #{roleId}
+    </delete>
+
+    <!--统计Role表中符合查询条件的记录条数-->
+    <select id="countRole" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM `role`
+        <where>
+            <if test="roleId != null">
+                AND role_id = #{roleId}
+            </if>
+            <if test="roleName != null and roleName != ''">
+                AND role_name = #{roleName}
+            </if>
+        </where>
+    </select>
+
+</mapper>

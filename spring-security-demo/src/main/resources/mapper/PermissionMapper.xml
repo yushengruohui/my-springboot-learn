@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ys.security.dao.PermissionMapper">
+
+    <resultMap type="com.ys.security.domain.entity.Permission" id="permissionMap">
+            <id property="permissionId" column="permission_id"/>
+            <result property="description" column="description"/>
+            <result property="accessibleMethod" column="accessible_method"/>
+            <result property="accessibleUrl" column="accessible_url"/>
+    </resultMap>
+
+    <sql id="studentAllColumn">
+            permission_id, description, accessible_method, accessible_url
+    </sql>
+
+    <!--获取Permission表的所有记录-->
+    <select id="listAllPermission" resultMap="permissionMap">
+        SELECT
+          <include refid="studentAllColumn" />
+        FROM `permission`
+    </select>
+
+    <!--通过主键获取Permission表的一条记录-->
+    <select id="getPermissionById" resultMap="permissionMap">
+        SELECT
+          <include refid="studentAllColumn" />
+        FROM `permission`
+        WHERE permission_id = #{permissionId}
+    </select>
+
+    <!--查询Permission表中是否存在符合查询条件的记录-->
+    <select id="existPermission" resultType="java.lang.Integer">
+        SELECT 1
+        FROM `permission`
+        <where>
+            <if test="permissionId != null">
+                AND permission_id = #{permissionId}
+            </if>
+            <if test="description != null and description != ''">
+                AND description = #{description}
+            </if>
+            <if test="accessibleMethod != null and accessibleMethod != ''">
+                AND accessible_method = #{accessibleMethod}
+            </if>
+            <if test="accessibleUrl != null and accessibleUrl != ''">
+                AND accessible_url = #{accessibleUrl}
+            </if>
+        </where>
+        LIMIT 1
+    </select>
+
+    <!--获取一条符合查询条件的Permission表记录-->
+    <select id="getPermission" resultMap="permissionMap">
+        SELECT
+          <include refid="studentAllColumn" />
+        FROM `permission`
+        <where>
+            <if test="permissionId != null">
+                AND permission_id = #{permissionId}
+            </if>
+            <if test="description != null and description != ''">
+                AND description = #{description}
+            </if>
+            <if test="accessibleMethod != null and accessibleMethod != ''">
+                AND accessible_method = #{accessibleMethod}
+            </if>
+            <if test="accessibleUrl != null and accessibleUrl != ''">
+                AND accessible_url = #{accessibleUrl}
+            </if>
+        </where>
+        LIMIT 1
+    </select>
+
+    <!--获取Permission表中符合查询条件的所有记录-->
+    <select id="listPermission" resultMap="permissionMap">
+        SELECT
+          <include refid="studentAllColumn" />
+        FROM `permission`
+        <where>
+            <if test="permissionId != null">
+                AND permission_id = #{permissionId}
+            </if>
+            <if test="description != null and description != ''">
+                AND description = #{description}
+            </if>
+            <if test="accessibleMethod != null and accessibleMethod != ''">
+                AND accessible_method = #{accessibleMethod}
+            </if>
+            <if test="accessibleUrl != null and accessibleUrl != ''">
+                AND accessible_url = #{accessibleUrl}
+            </if>
+        </where>
+    </select>
+
+    <!--在Permission表中添加一条记录-->
+    <insert id="insertPermission" keyProperty="permissionId" useGeneratedKeys="true">
+        INSERT INTO `permission`(
+            <trim suffixOverrides=",">
+            <if test="description != null and description != ''">description, </if>
+            <if test="accessibleMethod != null and accessibleMethod != ''">accessible_method, </if>
+            <if test="accessibleUrl != null and accessibleUrl != ''">accessible_url, </if>
+            </trim>
+                )
+        VALUES (
+            <trim suffixOverrides=",">
+            <if test="description != null and description != ''">#{description}, </if>
+            <if test="accessibleMethod != null and accessibleMethod != ''">#{accessibleMethod}, </if>
+            <if test="accessibleUrl != null and accessibleUrl != ''">#{accessibleUrl}, </if>
+            </trim>
+                )
+    </insert>
+
+    <!--在Permission表中更新一条记录-->
+    <update id="updatePermission">
+        UPDATE `permission`
+        <set>
+            <if test="description != null and description != ''">
+                description = #{description},
+            </if>
+            <if test="accessibleMethod != null and accessibleMethod != ''">
+                accessible_method = #{accessibleMethod},
+            </if>
+            <if test="accessibleUrl != null and accessibleUrl != ''">
+                accessible_url = #{accessibleUrl},
+            </if>
+        </set>
+        WHERE permission_id = #{permissionId}
+    </update>
+
+    <!--通过主键删除Permission表中的一条记录-->
+    <delete id="deletePermissionById">
+        DELETE FROM `permission` WHERE permission_id = #{permissionId}
+    </delete>
+
+    <!--统计Permission表中符合查询条件的记录条数-->
+    <select id="countPermission" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM `permission`
+        <where>
+            <if test="permissionId != null">
+                AND permission_id = #{permissionId}
+            </if>
+            <if test="description != null and description != ''">
+                AND description = #{description}
+            </if>
+            <if test="accessibleMethod != null and accessibleMethod != ''">
+                AND accessible_method = #{accessibleMethod}
+            </if>
+            <if test="accessibleUrl != null and accessibleUrl != ''">
+                AND accessible_url = #{accessibleUrl}
+            </if>
+        </where>
+    </select>
+
+</mapper>

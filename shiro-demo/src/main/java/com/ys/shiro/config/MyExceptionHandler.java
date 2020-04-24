@@ -22,7 +22,7 @@ public class MyExceptionHandler {
     public Map<String, Object> defaultExceptionHandler(BindException bindException, HttpServletResponse response) {
         //处理返回的错误信息
         Map<String, Object> resultMap = new HashMap<>();
-        StringBuffer errorMsg = new StringBuffer();
+        StringBuilder errorMsg = new StringBuilder();
         List<FieldError> fieldErrors = bindException.getBindingResult().getFieldErrors();
         for (FieldError fieldError : fieldErrors) {
             errorMsg.append(fieldError.getObjectName()).append(".").append(fieldError.getField()).append(fieldError.getDefaultMessage()).append(";");

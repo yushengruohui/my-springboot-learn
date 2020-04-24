@@ -1,8 +1,6 @@
 package com.ys.shiro.config.shiro;
 
-import com.ys.shiro.domain.entity.Permission;
 import com.ys.shiro.service.PermissionService;
-import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -14,7 +12,6 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.Resource;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -59,24 +56,6 @@ public class ShiroConfig {
     }
 
     /**
-     * 密码校验规则HashedCredentialsMatcher
-     * 这个类是为了对密码进行编码的 ,
-     * 防止密码在数据库里明码保存 , 当然在登陆认证的时候 ,
-     * 这个类也负责对form里输入的密码进行编码
-     * 处理认证匹配处理器：如果自定义需要实现继承HashedCredentialsMatcher
-     */
-    @Bean("hashedCredentialsMatcher")
-    public HashedCredentialsMatcher hashedCredentialsMatcher() {
-        HashedCredentialsMatcher credentialsMatcher = new HashedCredentialsMatcher();
-        //指定加密方式为MD5
-        credentialsMatcher.setHashAlgorithmName("MD5");
-        //加密次数
-        credentialsMatcher.setHashIterations(1024);
-        credentialsMatcher.setStoredCredentialsHexEncoded(true);
-        return credentialsMatcher;
-    }
-
-    /**
      * Shiro过滤器工厂，用于设置
      *
      * @return
@@ -99,12 +78,12 @@ public class ShiroConfig {
         accessConfigMap.put("/auth/**", "anon");
         // 对其他所有请求进行认证[更加详细的认证，需要在认证方法上添加 @RequiresRoles, @RequiresPermissions]
         accessConfigMap.put("/**", "authc");
-        List<Permission> permissions = permissionService.listAllPermission();
-        for (Permission permission : permissions) {
-            // 注意：重复的url，后者覆盖前者的值。
-            accessConfigMap.put(permission.getAccessibleUrl(), "perms[" + permission.getPermissionId().toString() + "]");
-        }
-
+        // 去数据库中获取所有资源URL的通行权限信息
+        // List<Permission> permissions = permissionService.listAllPermission();
+        // for (Permission permission : permissions) {
+        //     // 注意：重复的url，后者覆盖前者的值。
+        //     accessConfigMap.put(permission.getAccessibleUrl(), "perms[" + permission.getPermissionId().toString() + "]");
+        // }
         shiroFilterFactoryBean.setFilterChainDefinitionMap(accessConfigMap);
 
         return shiroFilterFactoryBean;

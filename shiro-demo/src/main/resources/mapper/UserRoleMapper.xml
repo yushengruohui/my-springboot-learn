@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ys.shiro.dao.UserRoleDao">
+
+    <resultMap type="com.ys.shiro.domain.entity.UserRole" id="userRoleMap">
+            <id property="userRoleId" column="user_role_id"/>
+            <result property="userId" column="user_id"/>
+            <result property="roleId" column="role_id"/>
+    </resultMap>
+
+    <sql id="studentAllColumn">
+            user_role_id, user_id, role_id
+    </sql>
+
+    <!--获取UserRole表的所有记录-->
+    <select id="listAllUserRole" resultMap="userRoleMap">
+        SELECT
+          <include refid="studentAllColumn" />
+        FROM `user_role`
+    </select>
+
+    <!--通过主键获取UserRole表的一条记录-->
+    <select id="getUserRoleById" resultMap="userRoleMap">
+        SELECT
+          <include refid="studentAllColumn" />
+        FROM `user_role`
+        WHERE user_role_id = #{userRoleId}
+    </select>
+
+    <!--查询UserRole表中是否存在符合查询条件的记录-->
+    <select id="existUserRole" resultType="java.lang.Integer">
+        SELECT 1
+        FROM `user_role`
+        <where>
+            <if test="userRoleId != null">
+                AND user_role_id = #{userRoleId}
+            </if>
+            <if test="userId != null">
+                AND user_id = #{userId}
+            </if>
+            <if test="roleId != null">
+                AND role_id = #{roleId}
+            </if>
+        </where>
+        LIMIT 1
+    </select>
+
+    <!--获取一条符合查询条件的UserRole表记录-->
+    <select id="getUserRole" resultMap="userRoleMap">
+        SELECT
+          <include refid="studentAllColumn" />
+        FROM `user_role`
+        <where>
+            <if test="userRoleId != null">
+                AND user_role_id = #{userRoleId}
+            </if>
+            <if test="userId != null">
+                AND user_id = #{userId}
+            </if>
+            <if test="roleId != null">
+                AND role_id = #{roleId}
+            </if>
+        </where>
+        LIMIT 1
+    </select>
+
+    <!--获取UserRole表中符合查询条件的所有记录-->
+    <select id="listUserRole" resultMap="userRoleMap">
+        SELECT
+          <include refid="studentAllColumn" />
+        FROM `user_role`
+        <where>
+            <if test="userRoleId != null">
+                AND user_role_id = #{userRoleId}
+            </if>
+            <if test="userId != null">
+                AND user_id = #{userId}
+            </if>
+            <if test="roleId != null">
+                AND role_id = #{roleId}
+            </if>
+        </where>
+    </select>
+
+    <!--在UserRole表中添加一条记录-->
+    <insert id="insertUserRole" keyProperty="userRoleId" useGeneratedKeys="true">
+        INSERT INTO `user_role`(
+            <trim suffixOverrides=",">
+            <if test="userId != null">user_id, </if>
+            <if test="roleId != null">role_id, </if>
+            </trim>
+                )
+        VALUES (
+            <trim suffixOverrides=",">
+            <if test="userId != null">#{userId}, </if>
+            <if test="roleId != null">#{roleId}, </if>
+            </trim>
+                )
+    </insert>
+
+    <!--在UserRole表中更新一条记录-->
+    <update id="updateUserRole">
+        UPDATE `user_role`
+        <set>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="roleId != null">
+                role_id = #{roleId},
+            </if>
+        </set>
+        WHERE user_role_id = #{userRoleId}
+    </update>
+
+    <!--通过主键删除UserRole表中的一条记录-->
+    <delete id="deleteUserRoleById">
+        DELETE FROM `user_role` WHERE user_role_id = #{userRoleId}
+    </delete>
+
+    <!--统计UserRole表中符合查询条件的记录条数-->
+    <select id="countUserRole" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM `user_role`
+        <where>
+            <if test="userRoleId != null">
+                AND user_role_id = #{userRoleId}
+            </if>
+            <if test="userId != null">
+                AND user_id = #{userId}
+            </if>
+            <if test="roleId != null">
+                AND role_id = #{roleId}
+            </if>
+        </where>
+    </select>
+
+</mapper>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+    <!--项目名称-->
+    <property name="PROJECT_NAME" value="vod"/>
+    <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径-->
+    <property name="LOG_HOME" value="/Logback"/>
+    <property name="LOG_MAX_HISTORY" value="30"/>
+    <property name="LOG_MAX_SIZE" value="10MB"/>
+    <property name="LOG_TOTAL_SIZE_CAP" value="1GB"/>
+    <!--
+        日志输出格式设置：
+        %p || %level : 输出优先级，即DEBUG,INFO,WARN,ERROR,FATAL
+        %r : 输出自应用启动到输出该日志讯息所耗费的毫秒数
+        %t : 输出产生该日志事件的线程名
+        %f : 输出日志讯息所属的类别的类别名
+        %c || %logger : 输出日志讯息所属的类的全名
+        %d || %date : 输出日志时间点的日期或时间，默认格式： %d{yyyy-MM-dd HH:mm:ss}
+        %l : 输出日志事件的发生位置，即输出日志讯息的语句在他所在类别的第几行。
+        %m || %msg : 输出代码中指定的讯息，如log(message)中的message
+        %n : 输出一个换行符号
+        %-整数 : 最小占位宽度
+    -->
+    <property name="DEV_FORMAT" value="[%-5level] --> %logger{1}: %msg %n"/>
+    <property name="RUN_FORMAT" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n"/>
+    <!-- 控制台输出 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${DEV_FORMAT}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+    <!-- 按照每天生成常规日志文件 -->
+    <appender name="FILE_MAIN_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/${PROJECT_NAME}/${PROJECT_NAME}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_HOME}/${PROJECT_NAME}/${PROJECT_NAME}-%d{yyyy-MM-dd}-%i.log.zip</FileNamePattern>
+            <MaxHistory>${LOG_MAX_HISTORY}</MaxHistory>
+            <MaxFileSize>${LOG_MAX_SIZE}</MaxFileSize>
+            <totalSizeCap>${LOG_TOTAL_SIZE_CAP}</totalSizeCap>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${RUN_FORMAT}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+    <!-- 按照每天生成错误级别日志文件 -->
+    <appender name="FILE_ERROR_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/${PROJECT_NAME}/error/${PROJECT_NAME}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_HOME}/${PROJECT_NAME}/error/${PROJECT_NAME}-%d{yyyy-MM-dd}-%i.log.zip
+            </FileNamePattern>
+            <MaxHistory>${LOG_MAX_HISTORY}</MaxHistory>
+            <MaxFileSize>${LOG_MAX_SIZE}</MaxFileSize>
+            <totalSizeCap>${LOG_TOTAL_SIZE_CAP}</totalSizeCap>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${RUN_FORMAT}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+    <!-- 按照每天生成警告级别日志文件 -->
+    <appender name="FILE_WARN_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/${PROJECT_NAME}/warn/${PROJECT_NAME}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_HOME}/${PROJECT_NAME}/warn/${PROJECT_NAME}-%d{yyyy-MM-dd}-%i.log.zip
+            </FileNamePattern>
+            <MaxHistory>${LOG_MAX_HISTORY}</MaxHistory>
+            <MaxFileSize>${LOG_MAX_SIZE}</MaxFileSize>
+            <totalSizeCap>${LOG_TOTAL_SIZE_CAP}</totalSizeCap>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${RUN_FORMAT}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+    <!-- 配置异步输出 -->
+    <appender name="STDOUT_ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="STDOUT"/>
+    </appender>
+    <appender name="FILE_MAIN_LOG_ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="FILE_MAIN_LOG"/>
+    </appender>
+    <appender name="FILE_ERROR_LOG_ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="FILE_ERROR_LOG"/>
+    </appender>
+    <appender name="FILE_WARN_LOG_ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="FILE_WARN_LOG"/>
+    </appender>
+    <!-- 关闭某包的日志输出 OFF全部关闭 , INFO,DEBUG ...
+    <logger name="x.x.Constants">
+        <level value="OFF"/>
+    </logger>
+    -->
+
+    <!-- show parameters for hibernate sql 专为 Hibernate 定制 -->
+    <!--<logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE"/>-->
+    <!--<logger name="org.hibernate.type.descriptor.sql.BasicExtractor" level="DEBUG"/>-->
+    <!--<logger name="org.hibernate.SQL" level="DEBUG"/>-->
+    <!--<logger name="org.hibernate.engine.QueryParameters" level="DEBUG"/>-->
+    <!--<logger name="org.hibernate.engine.query.HQLQueryPlan" level="DEBUG"/>-->
+
+    <!--mybatis log configure-->
+    <!--<logger name="com.ibatis" level="DEBUG"/>-->
+    <!--<logger name="com.ibatis.common.jdbc.SimpleDataSource" level="DEBUG"/>-->
+    <!--<logger name="com.ibatis.common.jdbc.ScriptRunner" level="DEBUG"/>-->
+    <!--<logger name="com.ibatis.sqlmap.engine.impl.SqlMapClientDelegate" level="DEBUG"/>-->
+
+    <logger name="java.sql.Connection" level="DEBUG"/>
+    <logger name="java.sql.Statement" level="DEBUG"/>
+    <logger name="java.sql.PreparedStatement" level="DEBUG"/>
+
+    <!-- 日志输出级别 -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT_ASYNC"/>
+        <appender-ref ref="FILE_MAIN_LOG_ASYNC"/>
+        <appender-ref ref="FILE_ERROR_LOG_ASYNC"/>
+        <appender-ref ref="FILE_WARN_LOG_ASYNC"/>
+    </root>
+</configuration>

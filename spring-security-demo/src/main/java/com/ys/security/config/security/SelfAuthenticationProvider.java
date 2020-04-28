@@ -31,7 +31,7 @@ public class SelfAuthenticationProvider implements AuthenticationProvider {
         // String macAddress = validatedInfo.getMacAddress();
         // String remoteAddress = validatedInfo.getRemoteAddress();
         // 获取认证信息
-        SelfUserDetails userInfo = (SelfUserDetails) selfUserDetailsService.loadUserByUsername(account);
+        MyUserDetails userInfo = (MyUserDetails) selfUserDetailsService.loadUserByUsername(account);
         //校验账号和密码
         boolean matches = new BCryptPasswordEncoder().matches(password, userInfo.getPassword());
         if (!matches) {

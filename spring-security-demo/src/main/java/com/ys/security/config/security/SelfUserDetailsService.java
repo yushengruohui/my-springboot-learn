@@ -64,14 +64,14 @@ public class SelfUserDetailsService implements UserDetailsService {
             }
         }
 
-        SelfUserDetails selfUserDetails = new SelfUserDetails();
-        selfUserDetails.setAccount(loginAccount);
+        MyUserDetails myUserDetails = new MyUserDetails();
+        myUserDetails.setAccount(loginAccount);
         // 一定要加密，否则security框架会抛出异常
-        selfUserDetails.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        selfUserDetails.setUserId(user.getUserId().toString());
-        selfUserDetails.setUsername(user.getUsername());
-        selfUserDetails.setRoleNameList(new ArrayList<MyGrantedAuthority>(grantedAuthoritySet));
-        selfUserDetails.setPermissions(new ArrayList<Permission>(permissionSet));
-        return selfUserDetails;
+        myUserDetails.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        myUserDetails.setUserId(user.getUserId().toString());
+        myUserDetails.setUsername(user.getUsername());
+        myUserDetails.setRoleNameList(new ArrayList<MyGrantedAuthority>(grantedAuthoritySet));
+        myUserDetails.setPermissions(new ArrayList<Permission>(permissionSet));
+        return myUserDetails;
     }
 }

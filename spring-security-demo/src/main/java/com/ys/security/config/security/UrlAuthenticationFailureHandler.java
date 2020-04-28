@@ -1,5 +1,7 @@
 package com.ys.security.config.security;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
@@ -14,11 +16,17 @@ import java.io.IOException;
  */
 @Component("urlAuthenticationFailureHandler")
 public class UrlAuthenticationFailureHandler implements AuthenticationFailureHandler {
+    private static final Logger log = LoggerFactory.getLogger(UrlAuthenticationFailureHandler.class);
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
         httpServletResponse.setContentType("application/json;charset=utf-8");
         httpServletResponse.setStatus(402);
-        httpServletResponse.getWriter().write("账号或密码错误");
+        try {
+            httpServletResponse.getWriter().write("error password");
+        } catch (IOException ioException) {
+            log.error("错误的密码");
+            ioException.printStackTrace();
+        }
     }
 }

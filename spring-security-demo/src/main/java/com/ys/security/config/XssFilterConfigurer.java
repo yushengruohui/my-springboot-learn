@@ -53,7 +53,7 @@ public class XssFilterConfigurer {
         return objectMapper;
     }
 
-    public class XssStringJsonSerializer extends JsonSerializer<String> {
+    private static class XssStringJsonSerializer extends JsonSerializer<String> {
         @Override
         public Class<String> handledType() {
             return String.class;

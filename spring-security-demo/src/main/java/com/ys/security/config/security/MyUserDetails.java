@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author yusheng
  */
-public class SelfUserDetails implements UserDetails, Serializable {
+public class MyUserDetails implements UserDetails, Serializable {
     private static final long serialVersionUID = 1L;
     private String userId;
     private String username;
@@ -22,7 +22,7 @@ public class SelfUserDetails implements UserDetails, Serializable {
     private List<? extends GrantedAuthority> roleNameList;
     private List<Permission> permissions;
 
-    public SelfUserDetails() {
+    public MyUserDetails() {
     }
 
     public String getUserId() {

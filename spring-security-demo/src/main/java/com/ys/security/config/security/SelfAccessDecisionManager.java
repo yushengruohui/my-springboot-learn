@@ -32,7 +32,7 @@ public class SelfAccessDecisionManager implements AccessDecisionManager {
                 throw new AccessDeniedException("没有访问权限!!");
             }
             // 当前用户所具有的权限
-            SelfUserDetails userInfo = (SelfUserDetails) authentication.getPrincipal();
+            MyUserDetails userInfo = (MyUserDetails) authentication.getPrincipal();
             List<Permission> permissions = userInfo.getPermissions();
             // 登陆后，验证用户访问权限
             for (Permission permission : permissions) {

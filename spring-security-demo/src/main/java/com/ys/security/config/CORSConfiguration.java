@@ -1,13 +1,15 @@
 package com.ys.security.config;
 
-import com.ys.security.config.security.JwtTokenUtils;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
-import java.util.Arrays;
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * springboot项目解决跨域问题
@@ -16,25 +18,45 @@ import java.util.Arrays;
 public class CORSConfiguration {
 
     @Bean
-    public CorsFilter corsFilter() {
-        //添加CORS配置信息
-        CorsConfiguration config = new CorsConfiguration();
-        //允许来自以下域[http://example.com]的请求访问,不推荐为*，否则cookie就无法使用了
-        config.setAllowedOrigins(Arrays.asList("http://localhost:8080", "http://127.0.0.1:8080", "https://localhost:8080", "http://127.0.0.1:8080"));
-        //是否允许传输 Cookie 信息
-        config.setAllowCredentials(true);
-        //允许的请求方式
-        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTION"));
-        //允许的头信息
-        config.setAllowedHeaders(Arrays.asList(JwtTokenUtils.TOKEN_KEY, "Origin", "X-Requested-With", "Content-Type", "Accept", "LastModified", "X-XSRF-TOKEN"));
-        // 配置有效时长，单位:s，数据类型:Long，当前设置时长为1小时
-        config.setMaxAge(3600L);
-
-        // 添加映射路径，拦截一切请求
-        UrlBasedCorsConfigurationSource configSource = new UrlBasedCorsConfigurationSource();
-        configSource.registerCorsConfiguration("/**", config);
-        //返回新的CorsFilter.
-        return new CorsFilter(configSource);
+    public FilterRegistrationBean<myCORSFilter> myCORSFilterFilterRegistrationBean() {
+        FilterRegistrationBean<myCORSFilter> filterRegistrationBean = new FilterRegistrationBean<>();
+        filterRegistrationBean.setFilter(new myCORSFilter());
+        // 先配置跨域请求
+        filterRegistrationBean.setOrder(1);
+        filterRegistrationBean.setEnabled(true);
+        filterRegistrationBean.addUrlPatterns("/*");
+        Map<String, String> initParameters = new HashMap<>();
+        //excludes用于配置不需要参数过滤的请求url
+        // initParameters.put("excludes", "/favicon.ico,/img/*,/js/*,/css/*");
+        //isIncludeRichText主要用于设置富文本内容是否需要过滤
+        // initParameters.put("isIncludeRichText", "true");
+        filterRegistrationBean.setInitParameters(initParameters);
+        return filterRegistrationBean;
     }
 
+    private static class myCORSFilter implements Filter {
+        @Override
+        public void init(FilterConfig filterConfig) {
+        }
+
+        @Override
+        public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
+            HttpServletResponse response = (HttpServletResponse) resp;
+            HttpServletRequest request = (HttpServletRequest) req;
+            // 处理简单请求
+            // 跨域请求默认不携带cookie,如果要携带cookie，需要设置下边2个响应头
+            response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));// 必选，所有有效的跨域响应都必须包含这个请求头, 没有的话会导致跨域请求失败
+            response.setHeader("Access-Control-Allow-Credentials", "true");//可选，此处设置为true,对应前端 xhr.withCredentials = true;
+            response.setHeader("Access-Control-Allow-Methods", "GET,OPTIONS,POST,PUT,DELETE");// 必选
+            response.setHeader("Access-Control-Allow-Headers", "Origin,X-Requested-With,Content-Type,Accept,LastModified,X-XSRF-TOKEN,Authorization");
+            response.setHeader("Access-Control-Max-Age", "3600");
+            response.setHeader("XDomainRequestAllowed", "1");
+            chain.doFilter(req, resp);
+        }
+
+
+        @Override
+        public void destroy() {
+        }
+    }
 }

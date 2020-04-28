@@ -1,6 +1,5 @@
 package com.ys.security.config.security;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationDetailsSource;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -13,15 +12,9 @@ import org.springframework.security.web.access.intercept.FilterSecurityIntercept
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * 登录拦截全局配置
@@ -30,65 +23,65 @@ import java.util.List;
 public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 
     @Resource(name = "urlAuthenticationEntryPoint")
-    private UrlAuthenticationEntryPoint authenticationEntryPoint;
+    private UrlAuthenticationEntryPoint urlAuthenticationEntryPoint;
 
     @Resource(name = "urlAuthenticationSuccessHandler")
-    private UrlAuthenticationSuccessHandler authenticationSuccessHandler;
+    private UrlAuthenticationSuccessHandler urlAuthenticationSuccessHandler;
 
     @Resource(name = "urlAuthenticationFailureHandler")
-    private UrlAuthenticationFailureHandler authenticationFailureHandler;
+    private UrlAuthenticationFailureHandler urlAuthenticationFailureHandler;
 
     @Resource(name = "urlAccessDeniedHandler")
-    private UrlAccessDeniedHandler accessDeniedHandler;
+    private UrlAccessDeniedHandler urlAccessDeniedHandler;
 
     @Resource(name = "urlLogoutSuccessHandler")
-    private UrlLogoutSuccessHandler logoutSuccessHandler;
+    private UrlLogoutSuccessHandler urlLogoutSuccessHandler;
 
     @Resource(name = "selfAuthenticationProvider")
-    private SelfAuthenticationProvider authenticationProvider;
+    private SelfAuthenticationProvider selfAuthenticationProvider;
 
     @Resource(name = "selfFilterInvocationSecurityMetadataSource")
-    private SelfFilterInvocationSecurityMetadataSource filterInvocationSecurityMetadataSource;
+    private SelfFilterInvocationSecurityMetadataSource selfFilterInvocationSecurityMetadataSource;
 
     @Resource(name = "selfAccessDecisionManager")
-    private SelfAccessDecisionManager accessDecisionManager;
+    private SelfAccessDecisionManager selfAccessDecisionManager;
 
     @Resource(name = "myAuthenticationDetailsSource")
-    private AuthenticationDetailsSource<HttpServletRequest, WebAuthenticationDetails> authenticationDetailsSource;
+    private AuthenticationDetailsSource<HttpServletRequest, WebAuthenticationDetails> myAuthentictionDetailsSource;
 
     @Resource(name = "jwtAuthorizationTokenFilter")
-    private JwtAuthorizationTokenFilter authorizationTokenFilter;
+    private JwtAuthorizationTokenFilter jwtAuthorizationTokenFilter;
 
-    /**
-     * 跨域配置，会自动配置到 spring-security 的过滤器链中
-     */
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        // 允许 携带以下域名的请求 跨域访问，通常设置为前端的域名或者*
-        List<String> allowedOriginsUrl = new ArrayList<>();
-        allowedOriginsUrl.add("localhost");
-        // allowedOriginsUrl.add("https://localhost:8080");
-        allowedOriginsUrl.add("127.0.0.1");
-        // allowedOriginsUrl.add("https://example.com");
-
-        CorsConfiguration config = new CorsConfiguration();
-        // 允许携带cookie
-        config.setAllowCredentials(true);
-        // 设置允许跨域访问的 URL
-        config.setAllowedOrigins(allowedOriginsUrl);
-        config.setAllowedHeaders(Arrays.asList("X-XSRF-TOKEN", "Authorization", JwtTokenUtils.TOKEN_KEY));
-        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTION"));
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-        return source;
-    }
+    // /**
+    //  * 跨域配置，会自动配置到 spring-security 的过滤器链中.
+    //  * 跨域资源共享另外配置，不在这里配置
+    //  */
+    // @Bean
+    // public CorsConfigurationSource corsConfigurationSource() {
+    //     // 允许 携带以下域名的请求 跨域访问，通常设置为前端|nginx代理的域名
+    //     List<String> allowedOriginsUrl = new ArrayList<>();
+    //     allowedOriginsUrl.add("https://localhost:8080");
+    //     allowedOriginsUrl.add("https://localhost:8080");
+    //     // allowedOriginsUrl.add("https://example.com");
+    //
+    //     CorsConfiguration config = new CorsConfiguration();
+    //     // 允许携带cookie
+    //     config.setAllowCredentials(true);
+    //     // 设置允许跨域访问的 URL
+    //     config.setAllowedOrigins(allowedOriginsUrl);
+    //     config.setAllowedHeaders(Arrays.asList(JwtTokenUtils.TOKEN_KEY, "Origin", "X-Requested-With", "Content-Type", "Accept", "LastModified", "X-XSRF-TOKEN"));
+    //     config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTION"));
+    //     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    //     source.registerCorsConfiguration("/**", config);
+    //     return source;
+    // }
 
     @Override
     public void configure(WebSecurity web) {
         //所有人都能访问，不进入安全框架的请求，常用于前后端未分离时放行静态资源url
         String[] ignoreUrl = {
-                "/resource/**/*.jpg",
-                "/resource/**/*.mp4"
+                "/js/**/*",
+                "/css/**/*"
         };
         web.ignoring().antMatchers(ignoreUrl);
     }
@@ -96,26 +89,26 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) {
         //自定义登录认证过程
-        auth.authenticationProvider(authenticationProvider);
+        auth.authenticationProvider(selfAuthenticationProvider);
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // 开启跨域请求配置
-        http.cors();
+        // http.cors();
         // csrf 验证[跨站请求伪造攻击]开启后，所有 [put|post|delete|patch] 请求的 header 中都要带有 X-XSRF-TOKEN 的 cookie 才能访问
         http.csrf().ignoringAntMatchers("/auth/**").csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
         // 内部系统、测试则可以关闭csrf验证
         // http.csrf().disable();
 
         // JwtToken验证，成功则生成authentication身份信息，跳过登陆认证流程，直接到权限认证流程
-        http.addFilterBefore(authorizationTokenFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthorizationTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
         // 未登录，但当前请求url需要权限认证（授权认证）时的处理：返回状态码401
-        http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
+        http.exceptionHandling().authenticationEntryPoint(urlAuthenticationEntryPoint);
 
         // 登陆了，但无权访问时的处理：返回状态码403
-        http.exceptionHandling().accessDeniedHandler(accessDeniedHandler);
+        http.exceptionHandling().accessDeniedHandler(urlAccessDeniedHandler);
 
         // 开启自动配置的登录功能
         http.formLogin()
@@ -124,9 +117,9 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
                 .usernameParameter("username").passwordParameter("password") //自定义登录用户名密码属性名,默认为username和password
                 // .successForwardUrl("/index") //登录成功后的url(post,前后端不分离)
                 // .failureForwardUrl("/error") //登录失败后的url(post,前后端不分离)
-                .successHandler(authenticationSuccessHandler) //验证成功处理器(前后端分离)：生成token及响应状态码200
-                .failureHandler(authenticationFailureHandler) //验证失败处理器(前后端分离)：返回状态码402
-                .authenticationDetailsSource(authenticationDetailsSource) //身份验证详细信息源(登录验证中增加额外字段)
+                .successHandler(urlAuthenticationSuccessHandler) //验证成功处理器(前后端分离)：生成token及响应状态码200
+                .failureHandler(urlAuthenticationFailureHandler) //验证失败处理器(前后端分离)：返回状态码402
+                .authenticationDetailsSource(myAuthentictionDetailsSource) //身份验证详细信息源(登录验证中增加额外字段)
                 .permitAll();
 
         // url权限认证处理
@@ -139,8 +132,8 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
                 .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
                     @Override
                     public <O extends FilterSecurityInterceptor> O postProcess(O o) {
-                        o.setSecurityMetadataSource(filterInvocationSecurityMetadataSource); //动态获取url权限配置
-                        o.setAccessDecisionManager(accessDecisionManager); //权限判断
+                        o.setSecurityMetadataSource(selfFilterInvocationSecurityMetadataSource); //动态获取url权限配置
+                        o.setAccessDecisionManager(selfAccessDecisionManager); //权限判断
                         return o;
                     }
                 });
@@ -157,6 +150,6 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
                 //注销成功处理器(前后端分离)：返回状态码200
-                .logoutSuccessHandler(logoutSuccessHandler);
+                .logoutSuccessHandler(urlLogoutSuccessHandler);
     }
 }

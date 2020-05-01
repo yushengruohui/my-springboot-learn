@@ -1,10 +1,10 @@
-package com.ys.security;
+package com.ys.swagger;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SpringSecurityDemoApplicationTests {
+class SwaggerDemoApplicationTests {
 
     @Test
     void contextLoads() {

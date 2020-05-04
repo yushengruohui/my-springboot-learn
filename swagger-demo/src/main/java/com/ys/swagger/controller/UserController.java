@@ -1,6 +1,5 @@
 package com.ys.swagger.controller;
 
-import com.ys.swagger.entity.User;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -56,6 +55,5 @@ public class UserController {
         users.remove(id);
         return "success";
     }
-
 }
 

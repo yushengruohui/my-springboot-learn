@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ys.swagger.dao.SysUserDao">
+
+    <resultMap type="com.ys.swagger.domain.entity.SysUser" id="sysUserMap">
+        <id property="userId" column="user_id"/>
+        <result property="name" column="name"/>
+        <result property="gender" column="gender"/>
+        <result property="account" column="account"/>
+        <result property="password" column="password"/>
+        <result property="createAt" column="create_at"/>
+        <result property="createBy" column="create_by"/>
+        <result property="modifyAt" column="modify_at"/>
+        <result property="modifyBy" column="modify_by"/>
+    </resultMap>
+
+    <sql id="SysUserAllColumn">
+        user_id, name, gender, account, password, create_at, create_by, modify_at, modify_by
+    </sql>
+    
+    <!--获取SysUser表的所有记录-->
+    <select id="listAllSysUser" resultMap="sysUserMap">
+        SELECT
+            <include refid="SysUserAllColumn" />
+        FROM `sys_user`
+    </select>
+
+    <!--通过主键获取SysUser表的一条记录-->
+    <select id="getSysUserById" resultMap="sysUserMap">
+        SELECT
+            <include refid="SysUserAllColumn" />
+        FROM `sys_user`
+        WHERE user_id = #{userId}
+    </select>
+
+    <!--查询SysUser表中是否存在符合查询条件的记录-->
+    <select id="existSysUser" resultType="java.lang.Integer">
+        SELECT 1
+        FROM `sys_user`
+        <where>
+            <if test="userId != null">
+                AND user_id = #{userId}
+            </if>
+            <if test="name != null and name != ''">
+                AND name = #{name}
+            </if>
+            <if test="gender != null">
+                AND gender = #{gender}
+            </if>
+            <if test="account != null and account != ''">
+                AND account = #{account}
+            </if>
+            <if test="password != null and password != ''">
+                AND password = #{password}
+            </if>
+            <if test="createAt != null">
+                AND create_at = #{createAt}
+            </if>
+            <if test="createBy != null">
+                AND create_by = #{createBy}
+            </if>
+            <if test="modifyAt != null">
+                AND modify_at = #{modifyAt}
+            </if>
+            <if test="modifyBy != null">
+                AND modify_by = #{modifyBy}
+            </if>
+        </where>
+        LIMIT 1
+    </select>
+
+    <!--获取一条符合查询条件的SysUser表记录-->
+    <select id="getSysUser" resultMap="sysUserMap">
+        SELECT
+            <include refid="SysUserAllColumn" />
+        FROM `sys_user`
+        <where>
+            <if test="userId != null">
+                AND user_id = #{userId}
+            </if>
+            <if test="name != null and name != ''">
+                AND name = #{name}
+            </if>
+            <if test="gender != null">
+                AND gender = #{gender}
+            </if>
+            <if test="account != null and account != ''">
+                AND account = #{account}
+            </if>
+            <if test="password != null and password != ''">
+                AND password = #{password}
+            </if>
+            <if test="createAt != null">
+                AND create_at = #{createAt}
+            </if>
+            <if test="createBy != null">
+                AND create_by = #{createBy}
+            </if>
+            <if test="modifyAt != null">
+                AND modify_at = #{modifyAt}
+            </if>
+            <if test="modifyBy != null">
+                AND modify_by = #{modifyBy}
+            </if>
+        </where>
+        LIMIT 1
+    </select>
+
+    <!--获取SysUser表中符合查询条件的所有记录-->
+    <select id="listSysUser" resultMap="sysUserMap">
+        SELECT
+            <include refid="SysUserAllColumn" />
+        FROM `sys_user`
+        <where>
+            <if test="userId != null">
+                AND user_id = #{userId}
+            </if>
+            <if test="name != null and name != ''">
+                AND name = #{name}
+            </if>
+            <if test="gender != null">
+                AND gender = #{gender}
+            </if>
+            <if test="account != null and account != ''">
+                AND account = #{account}
+            </if>
+            <if test="password != null and password != ''">
+                AND password = #{password}
+            </if>
+            <if test="createAt != null">
+                AND create_at = #{createAt}
+            </if>
+            <if test="createBy != null">
+                AND create_by = #{createBy}
+            </if>
+            <if test="modifyAt != null">
+                AND modify_at = #{modifyAt}
+            </if>
+            <if test="modifyBy != null">
+                AND modify_by = #{modifyBy}
+            </if>
+        </where>
+    </select>
+
+    <!--在SysUser表中添加一条记录-->
+    <insert id="insertSysUser" keyProperty="userId" useGeneratedKeys="true">
+        INSERT INTO `sys_user`(
+            <trim suffixOverrides=",">
+            <if test="name != null and name != ''">name, </if>
+            <if test="gender != null">gender, </if>
+            <if test="account != null and account != ''">account, </if>
+            <if test="password != null and password != ''">password, </if>
+            <if test="createAt != null">create_at, </if>
+            <if test="createBy != null">create_by, </if>
+            <if test="modifyAt != null">modify_at, </if>
+            <if test="modifyBy != null">modify_by, </if>
+            </trim>
+                )
+        VALUES (
+            <trim suffixOverrides=",">
+            <if test="name != null and name != ''">#{name}, </if>
+            <if test="gender != null">#{gender}, </if>
+            <if test="account != null and account != ''">#{account}, </if>
+            <if test="password != null and password != ''">#{password}, </if>
+            <if test="createAt != null">#{createAt}, </if>
+            <if test="createBy != null">#{createBy}, </if>
+            <if test="modifyAt != null">#{modifyAt}, </if>
+            <if test="modifyBy != null">#{modifyBy}, </if>
+            </trim>
+                )
+    </insert>
+
+    <!--在SysUser表中更新一条记录-->
+    <update id="updateSysUser">
+        UPDATE `sys_user`
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="gender != null">
+                gender = #{gender},
+            </if>
+            <if test="account != null and account != ''">
+                account = #{account},
+            </if>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            <if test="createAt != null">
+                create_at = #{createAt},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy},
+            </if>
+            <if test="modifyAt != null">
+                modify_at = #{modifyAt},
+            </if>
+            <if test="modifyBy != null">
+                modify_by = #{modifyBy},
+            </if>
+        </set>
+        WHERE user_id = #{userId}
+    </update>
+
+    <!--通过主键删除SysUser表中的一条记录-->
+    <delete id="deleteSysUserById">
+        DELETE FROM `sys_user` WHERE user_id = #{userId}
+    </delete>
+    
+    <!--删除SysUser表中所有符合查询条件的记录-->
+    <delete id="deleteSysUser">
+        DELETE
+        FROM `sys_user`
+        <where>
+            <if test="userId != null">
+                AND user_id = #{userId}
+            </if>
+            <if test="name != null and name != ''">
+                AND name = #{name}
+            </if>
+            <if test="gender != null">
+                AND gender = #{gender}
+            </if>
+            <if test="account != null and account != ''">
+                AND account = #{account}
+            </if>
+            <if test="password != null and password != ''">
+                AND password = #{password}
+            </if>
+            <if test="createAt != null">
+                AND create_at = #{createAt}
+            </if>
+            <if test="createBy != null">
+                AND create_by = #{createBy}
+            </if>
+            <if test="modifyAt != null">
+                AND modify_at = #{modifyAt}
+            </if>
+            <if test="modifyBy != null">
+                AND modify_by = #{modifyBy}
+            </if>
+        </where>
+    </delete>
+    
+    <!--统计SysUser表中符合查询条件的记录条数-->
+    <select id="countSysUser" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM `sys_user`
+        <where>
+            <if test="userId != null">
+                AND user_id = #{userId}
+            </if>
+            <if test="name != null and name != ''">
+                AND name = #{name}
+            </if>
+            <if test="gender != null">
+                AND gender = #{gender}
+            </if>
+            <if test="account != null and account != ''">
+                AND account = #{account}
+            </if>
+            <if test="password != null and password != ''">
+                AND password = #{password}
+            </if>
+            <if test="createAt != null">
+                AND create_at = #{createAt}
+            </if>
+            <if test="createBy != null">
+                AND create_by = #{createBy}
+            </if>
+            <if test="modifyAt != null">
+                AND modify_at = #{modifyAt}
+            </if>
+            <if test="modifyBy != null">
+                AND modify_by = #{modifyBy}
+            </if>
+        </where>
+    </select>
+
+</mapper>

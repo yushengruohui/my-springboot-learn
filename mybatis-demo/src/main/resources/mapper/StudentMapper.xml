@@ -10,21 +10,21 @@
         <result property="score" column="score"/>
     </resultMap>
 
-    <sql id="studentAllColumn">
-            student_id, name, gender, status, score
+    <sql id="StudentFields">
+        student_id, name, gender, status, score
     </sql>
 
     <!--获取Student表的所有记录-->
     <select id="listAllStudent" resultMap="studentMap">
         SELECT
-        <include refid="studentAllColumn"/>
+            <include refid="StudentFields" />
         FROM `student`
     </select>
 
     <!--通过主键获取Student表的一条记录-->
     <select id="getStudentById" resultMap="studentMap">
         SELECT
-        <include refid="studentAllColumn"/>
+            <include refid="StudentFields" />
         FROM `student`
         WHERE student_id = #{studentId}
     </select>
@@ -34,21 +34,11 @@
         SELECT 1
         FROM `student`
         <where>
-            <if test="studentId != null">
-                AND student_id = #{studentId}
-            </if>
-            <if test="name != null and name != ''">
-                AND name = #{name}
-            </if>
-            <if test="gender != null">
-                AND gender = #{gender}
-            </if>
-            <if test="status != null">
-                AND status = #{status}
-            </if>
-            <if test="score != null and score != ''">
-                AND score = #{score}
-            </if>
+            <if test="studentId != null">AND student_id = #{studentId}</if>
+            <if test="name != null and name != ''">AND name = #{name}</if>
+            <if test="gender != null">AND gender = #{gender}</if>
+            <if test="status != null">AND status = #{status}</if>
+            <if test="score != null and score != ''">AND score = #{score}</if>
         </where>
         LIMIT 1
     </select>
@@ -56,24 +46,14 @@
     <!--获取一条符合查询条件的Student表记录-->
     <select id="getStudent" resultMap="studentMap">
         SELECT
-        <include refid="studentAllColumn"/>
+            <include refid="StudentFields" />
         FROM `student`
         <where>
-            <if test="studentId != null">
-                AND student_id = #{studentId}
-            </if>
-            <if test="name != null and name != ''">
-                AND name = #{name}
-            </if>
-            <if test="gender != null">
-                AND gender = #{gender}
-            </if>
-            <if test="status != null">
-                AND status = #{status}
-            </if>
-            <if test="score != null and score != ''">
-                AND score = #{score}
-            </if>
+            <if test="studentId != null">AND student_id = #{studentId}</if>
+            <if test="name != null and name != ''">AND name = #{name}</if>
+            <if test="gender != null">AND gender = #{gender}</if>
+            <if test="status != null">AND status = #{status}</if>
+            <if test="score != null and score != ''">AND score = #{score}</if>
         </where>
         LIMIT 1
     </select>
@@ -81,63 +61,42 @@
     <!--获取Student表中符合查询条件的所有记录-->
     <select id="listStudent" resultMap="studentMap">
         SELECT
-        <include refid="studentAllColumn"/>
+            <include refid="StudentFields" />
         FROM `student`
         <where>
-            <if test="studentId != null">
-                AND student_id = #{studentId}
-            </if>
-            <if test="name != null and name != ''">
-                AND name = #{name}
-            </if>
-            <if test="gender != null">
-                AND gender = #{gender}
-            </if>
-            <if test="status != null">
-                AND status = #{status}
-            </if>
-            <if test="score != null and score != ''">
-                AND score = #{score}
-            </if>
+            <if test="studentId != null">AND student_id = #{studentId}</if>
+            <if test="name != null and name != ''">AND name = #{name}</if>
+            <if test="gender != null">AND gender = #{gender}</if>
+            <if test="status != null">AND status = #{status}</if>
+            <if test="score != null and score != ''">AND score = #{score}</if>
         </where>
     </select>
 
     <!--在Student表中添加一条记录-->
     <insert id="insertStudent" keyProperty="studentId" useGeneratedKeys="true">
-        INSERT INTO `student`(
-        <trim suffixOverrides=",">
+        INSERT INTO `student`
+        <trim prefix="(" suffixOverrides="," suffix=")">
             <if test="name != null and name != ''">name,</if>
             <if test="gender != null">gender,</if>
             <if test="status != null">status,</if>
             <if test="score != null and score != ''">score,</if>
         </trim>
-        )
-        VALUES (
-        <trim suffixOverrides=",">
+        <trim prefix="VALUES (" suffixOverrides="," suffix=")">
             <if test="name != null and name != ''">#{name},</if>
             <if test="gender != null">#{gender},</if>
             <if test="status != null">#{status},</if>
             <if test="score != null and score != ''">#{score},</if>
         </trim>
-        )
     </insert>
 
     <!--在Student表中更新一条记录-->
     <update id="updateStudent">
         UPDATE `student`
         <set>
-            <if test="name != null and name != ''">
-                name = #{name},
-            </if>
-            <if test="gender != null">
-                gender = #{gender},
-            </if>
-            <if test="status != null">
-                status = #{status},
-            </if>
-            <if test="score != null and score != ''">
-                score = #{score},
-            </if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="score != null and score != ''">score = #{score},</if>
         </set>
         WHERE student_id = #{studentId}
     </update>
@@ -147,26 +106,29 @@
         DELETE FROM `student` WHERE student_id = #{studentId}
     </delete>
 
+    <!--删除Student表中所有符合查询条件的记录-->
+    <delete id="deleteStudent">
+        DELETE
+        FROM `student`
+        <where>
+            <if test="studentId != null">AND student_id = #{studentId}</if>
+            <if test="name != null and name != ''">AND name = #{name}</if>
+            <if test="gender != null">AND gender = #{gender}</if>
+            <if test="status != null">AND status = #{status}</if>
+            <if test="score != null and score != ''">AND score = #{score}</if>
+        </where>
+    </delete>
+
     <!--统计Student表中符合查询条件的记录条数-->
     <select id="countStudent" resultType="java.lang.Integer">
         SELECT COUNT(*)
         FROM `student`
         <where>
-            <if test="studentId != null">
-                AND student_id = #{studentId}
-            </if>
-            <if test="name != null and name != ''">
-                AND name = #{name}
-            </if>
-            <if test="gender != null">
-                AND gender = #{gender}
-            </if>
-            <if test="status != null">
-                AND status = #{status}
-            </if>
-            <if test="score != null and score != ''">
-                AND score = #{score}
-            </if>
+            <if test="studentId != null">AND student_id = #{studentId}</if>
+            <if test="name != null and name != ''">AND name = #{name}</if>
+            <if test="gender != null">AND gender = #{gender}</if>
+            <if test="status != null">AND status = #{status}</if>
+            <if test="score != null and score != ''">AND score = #{score}</if>
         </where>
     </select>
 

@@ -18,6 +18,7 @@ Desktop.ini
 .sts4-cache
 
 ### IntelliJ IDEA ###
+bob.properties
 .idea
 *.iws
 *.iml

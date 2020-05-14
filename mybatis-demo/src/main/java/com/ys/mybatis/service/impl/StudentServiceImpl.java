@@ -9,13 +9,14 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * (Student)表服务实现类
+ * Student表业务层具体实现类
  *
+ * @create-time 2020-05-10 22:24:44
  * @author yusheng
  */
 @Service("studentService")
 public class StudentServiceImpl implements StudentService {
-    
+    //private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(StudentServiceImpl.class);
     @Resource
     private StudentDao studentDao;
 
@@ -28,29 +29,29 @@ public class StudentServiceImpl implements StudentService {
     public List<Student> listAllStudent() {
         return studentDao.listAllStudent();
     }
-    
+
     /**
      * 通过主键获取一条 Student 表记录
      *
      * @param studentId Student表主键
-     * @return studentPO  
+     * @return studentPO
      */
     @Override
     public Student getStudentById(Long studentId) {
         return studentDao.getStudentById(studentId);
     }
-    
+
     /**
      * 获取一条符合要求的 Student 表记录
      *
      * @param studentQO 查询条件对象
-     * @return studentPO  
+     * @return studentPO
      */
     @Override
     public Student getStudent(Student studentQO) {
         return studentDao.getStudent(studentQO);
     }
-    
+
     /**
      * 获取 Student 表中符合查询条件的所有记录
      *
@@ -61,7 +62,7 @@ public class StudentServiceImpl implements StudentService {
     public List<Student> listStudent(Student studentQO) {
         return studentDao.listStudent(studentQO);
     }
-    
+
     /**
      * 在 Student 表中添加一条记录
      *
@@ -94,7 +95,18 @@ public class StudentServiceImpl implements StudentService {
     public Boolean deleteStudentById(Long studentId) {
         return 1 == studentDao.deleteStudentById(studentId);
     }
-    
+
+    /**
+     * 删除 Student 表中所有符合查询条件的记录
+     *
+     * @param studentQO 查询条件对象（注意：属性全为空，则删除所有记录)
+     * @return 删除记录的条数
+     */
+    @Override
+    public Boolean deleteStudent(Student studentQO) {
+        return 0 != studentDao.deleteStudent(studentQO);
+    }
+
     /**
      * 查询 Student 表中是否存在符合查询条件的记录
      *
@@ -105,7 +117,7 @@ public class StudentServiceImpl implements StudentService {
     public Boolean existStudent(Student studentQO) {
         return null != studentDao.existStudent(studentQO);
     }
-    
+
     /**
      * 统计 Student 表中符合查询条件的记录条数
      *
@@ -116,7 +128,7 @@ public class StudentServiceImpl implements StudentService {
     public Integer countStudent(Student studentQO) {
         return studentDao.countStudent(studentQO);
     }
-    
+
     /**
      * 保存一条 Student 表记录
      *
@@ -132,4 +144,5 @@ public class StudentServiceImpl implements StudentService {
             return 1 == studentDao.insertStudent(studentQO);
         }
     }
+    
 }

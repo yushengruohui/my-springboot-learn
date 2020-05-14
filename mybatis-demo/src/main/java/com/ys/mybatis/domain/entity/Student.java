@@ -1,29 +1,27 @@
 package com.ys.mybatis.domain.entity;
 
 import java.io.Serializable;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
+import java.util.Objects;
 
 /**
- * (Student)表实体类
+ * [Student]表实体类
  *
  * @author yusheng
- * @since 2020-04-12 17:37:58
+ * Created on 2020-05-10 22:26:02
  */
 public class Student implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
-    private Long studentId;
-    
-    private String name;
-    
-    private Integer gender;
-    
-    private Integer status;
-    
-    private String score;
 
+    private Long studentId;
+
+    private String name;
+
+    private Integer gender;
+
+    private Integer status;
+
+    private String score;
         
     public Long getStudentId() {
         return studentId;
@@ -67,20 +65,81 @@ public class Student implements Serializable {
 
     @Override
     public String toString() {
-        StringBuffer sb=new StringBuffer(300);
-        sb.append("{");
-        sb.append(" ").append("studentId").append(" : ");
-        sb.append(studentId).append(" ,");
-        sb.append(" ").append("name").append(" : ");
-        sb.append("\"").append(name).append("\" ,");
-        sb.append(" ").append("gender").append(" : ");
-        sb.append(gender).append(" ,");
-        sb.append(" ").append("status").append(" : ");
-        sb.append(status).append(" ,");
-        sb.append(" ").append("score").append(" : ");
-        sb.append("\"").append(score).append("\" ,");
-        sb.deleteCharAt(sb.lastIndexOf(","));
-        sb.append("}");
-        return sb.toString();
+        return "Student{" +
+                "studentId=" + studentId +
+                ", name='" + name + '\'' +
+                ", gender=" + gender +
+                ", status=" + status +
+                ", score='" + score + '\'' +
+                "}";
     }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(studentId, name, gender, status, score);
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Student student = (Student) o;
+        return Objects.equals(studentId, student.studentId) && Objects.equals(name, student.name) && Objects.equals(gender, student.gender) && Objects.equals(status, student.status) && Objects.equals(score, student.score);
+    }
+    
+    public Student() {
+        super();
+    }
+    
+    public static StudentBuilder builder() {
+        StudentBuilder studentBuilder = new StudentBuilder();
+        studentBuilder.student = new Student();
+        return studentBuilder;
+    }
+
+    public static StudentBuilder builder(Student student) {
+        StudentBuilder studentBuilder = new StudentBuilder();
+        studentBuilder.student = student == null ? new Student() : student;
+        return studentBuilder;
+    }
+    
+    public static class StudentBuilder {
+
+        private Student student;        
+
+        public StudentBuilder studentId(Long studentId) {
+            student.studentId = studentId;
+            return this;
+        }
+
+        public StudentBuilder name(String name) {
+            student.name = name;
+            return this;
+        }
+
+        public StudentBuilder gender(Integer gender) {
+            student.gender = gender;
+            return this;
+        }
+
+        public StudentBuilder status(Integer status) {
+            student.status = status;
+            return this;
+        }
+
+        public StudentBuilder score(String score) {
+            student.score = score;
+            return this;
+        }
+
+        public Student build() {
+            return this.student;
+        }
+
+    }
+    
 }

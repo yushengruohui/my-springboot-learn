@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 @SpringBootTest
 class MybatisDemoApplicationTests {
@@ -16,8 +15,10 @@ class MybatisDemoApplicationTests {
 
     @Test
     void mybatisDemo1() {
-        List<Student> students = studentService.listAllStudent();
-        System.out.println("students = " + students);
+        // List<Student> students = studentService.listAllStudent();
+        Student student = new Student();
+        student.setStudentId(1L);
+        System.out.println("students = " + studentService.getStudent(student));
     }
 
     @Test
@@ -28,7 +29,7 @@ class MybatisDemoApplicationTests {
         student.setGender(0);
         student.setStatus(0);
         student.setScore("56");
-        studentService.saveStudent(student);
+        studentService.insertStudent(student);
     }
 
 }

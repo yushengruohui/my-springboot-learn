@@ -1,12 +1,13 @@
 package com.ys.mybatis.dao;
 
 import com.ys.mybatis.domain.entity.Student;
-
+import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * (Student)表数据库访问层
+ * Student表数据库数据访问层接口
  *
+ * @create-time 2020-05-10 22:24:44
  * @author yusheng
  */
 public interface StudentDao {
@@ -26,7 +27,7 @@ public interface StudentDao {
      */
     Student getStudentById(Long studentId);
 
-    /**
+   /**
      * 获取一条符合要求的 Student 表记录
      *
      * @param studentQO 查询条件对象
@@ -67,6 +68,14 @@ public interface StudentDao {
     Integer deleteStudentById(Long studentId);
 
     /**
+     * 删除 Student 表中所有符合查询条件的记录
+     *
+     * @param studentQO 查询条件对象（注意：属性全为空，则删除所有记录)
+     * @return 删除记录的条数
+     */
+    Integer deleteStudent(Student studentQO);
+
+    /**
      * 查询 Student 表是否存在符合查询条件的一条记录
      *
      * @param studentQO 查询条件对象
@@ -81,4 +90,5 @@ public interface StudentDao {
      * @return 统计值
      */
     Integer countStudent(Student studentQO);
+    
 }

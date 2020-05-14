@@ -14,8 +14,8 @@ import java.text.SimpleDateFormat;
  **/
 @Document(indexName = "video-album", type = "video-info")
 public class Book implements Serializable {
-
     private static final long serialVersionUID = 1L;
+
     @Id
     private String id;
     private String name;

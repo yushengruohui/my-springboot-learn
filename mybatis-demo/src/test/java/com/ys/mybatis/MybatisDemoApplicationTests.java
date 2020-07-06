@@ -32,4 +32,9 @@ class MybatisDemoApplicationTests {
         studentService.insertStudent(student);
     }
 
+    @Test
+    void mybatisDemo3() {
+        studentService.deleteStudentById((long) 1);
+    }
+
 }

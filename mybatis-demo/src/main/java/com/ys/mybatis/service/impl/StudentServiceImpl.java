@@ -11,8 +11,8 @@ import java.util.List;
 /**
  * Student表业务层具体实现类
  *
- * @create-time 2020-05-10 22:24:44
  * @author yusheng
+ * Created on 2020-07-02 22:27:53
  */
 @Service("studentService")
 public class StudentServiceImpl implements StudentService {
@@ -20,128 +20,63 @@ public class StudentServiceImpl implements StudentService {
     @Resource
     private StudentDao studentDao;
 
-    /**
-     * 获取 Student 表所有记录
-     *
-     * @return studentPOList
-     */
     @Override
     public List<Student> listAllStudent() {
         return studentDao.listAllStudent();
     }
 
-    /**
-     * 通过主键获取一条 Student 表记录
-     *
-     * @param studentId Student表主键
-     * @return studentPO
-     */
     @Override
     public Student getStudentById(Long studentId) {
         return studentDao.getStudentById(studentId);
     }
 
-    /**
-     * 获取一条符合要求的 Student 表记录
-     *
-     * @param studentQO 查询条件对象
-     * @return studentPO
-     */
     @Override
-    public Student getStudent(Student studentQO) {
-        return studentDao.getStudent(studentQO);
+    public Student getStudent(Student student) {
+        return studentDao.getStudent(student);
     }
 
-    /**
-     * 获取 Student 表中符合查询条件的所有记录
-     *
-     * @param studentQO 查询条件对象
-     * @return StudentPOList
-     */
     @Override
-    public List<Student> listStudent(Student studentQO) {
-        return studentDao.listStudent(studentQO);
+    public List<Student> listStudent(Student student) {
+        return studentDao.listStudent(student);
     }
 
-    /**
-     * 在 Student 表中添加一条记录
-     *
-     * @param studentQO 查询条件对象
-     * @return true|false
-     */
     @Override
-    public Boolean insertStudent(Student studentQO) {
-        return  1 == studentDao.insertStudent(studentQO);
+    public Boolean insertStudent(Student student) {
+        return  1 == studentDao.insertStudent(student);
     }
 
-    /**
-     * 在 Student 表中修改一条记录
-     *
-     * @param studentQO 主键不为空的查询条件对象
-     * @return true|false
-     */
     @Override
-    public Boolean updateStudent(Student studentQO) {
-        return 1 == studentDao.updateStudent(studentQO);
+    public Boolean updateStudent(Student student) {
+        return 1 == studentDao.updateStudent(student);
     }
 
-    /**
-     * 通过主键删除 Student 表中的一条记录
-     *
-     * @param studentId Student表主键
-     * @return true|false
-     */
     @Override
     public Boolean deleteStudentById(Long studentId) {
         return 1 == studentDao.deleteStudentById(studentId);
     }
 
-    /**
-     * 删除 Student 表中所有符合查询条件的记录
-     *
-     * @param studentQO 查询条件对象（注意：属性全为空，则删除所有记录)
-     * @return 删除记录的条数
-     */
     @Override
-    public Boolean deleteStudent(Student studentQO) {
-        return 0 != studentDao.deleteStudent(studentQO);
+    public Boolean deleteStudent(Student student) {
+        return 0 != studentDao.deleteStudent(student);
     }
 
-    /**
-     * 查询 Student 表中是否存在符合查询条件的记录
-     *
-     * @param studentQO 查询条件对象
-     * @return true|false
-     */
     @Override
-    public Boolean existStudent(Student studentQO) {
-        return null != studentDao.existStudent(studentQO);
+    public Boolean existStudent(Student student) {
+        return null != studentDao.existStudent(student);
     }
 
-    /**
-     * 统计 Student 表中符合查询条件的记录条数
-     *
-     * @param studentQO 查询条件对象
-     * @return 统计值
-     */
     @Override
-    public Integer countStudent(Student studentQO) {
-        return studentDao.countStudent(studentQO);
+    public Integer countStudent(Student student) {
+        return studentDao.countStudent(student);
     }
 
-    /**
-     * 保存一条 Student 表记录
-     *
-     * @param studentQO 查询条件对象
-     * @return true|false
-     */
     @Override
-    public Boolean saveStudent(Student studentQO) {
-        Long studentId = studentQO.getStudentId( );
+    public Boolean saveStudent(Student student) {
+        Long studentId = student.getStudentId( );
         if (studentId != null) {
-            return 1 == studentDao.updateStudent(studentQO);
+            return 1 == studentDao.updateStudent(student);
         } else {
-            return 1 == studentDao.insertStudent(studentQO);
+            return 1 == studentDao.insertStudent(student);
         }
     }
     

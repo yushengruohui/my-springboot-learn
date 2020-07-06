@@ -16,6 +16,7 @@ public class WebTestController {
 
     @GetMapping
     public String get() {
+        System.out.println("true = " + true);
         return "success";
     }
 

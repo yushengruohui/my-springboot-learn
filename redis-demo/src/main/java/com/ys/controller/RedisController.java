@@ -40,7 +40,6 @@ public class RedisController {
 
     @PostMapping
     public void add() {
-        // 分开存储
         stringRedisTemplate.opsForValue().set("1", "我真的无语了");
         stringRedisTemplate.opsForValue().increment("user:age", 1L);
         // 定时失效

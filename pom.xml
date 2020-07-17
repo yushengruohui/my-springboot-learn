@@ -16,6 +16,8 @@
         <module>swagger-demo</module>
         <module>web-demo</module>
         <module>redis-demo</module>
+        <module>actuator-demo</module>
+        <module>mongo-demo</module>
     </modules>
     <!--spring版本控制-->
     <parent>
